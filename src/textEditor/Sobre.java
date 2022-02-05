@@ -10,7 +10,7 @@ public class Sobre {
 		JFrame window = new JFrame("Sobre");
 		window.add(new JLabel(
 				"<html><body style=\"background-color:grey;\"><h1 style=\"color: #4485b8; text-align: center;\">Editor de Texto em Java</h1>\r\n"
-						+ "<p style=\"text-align: center;\"><strong style=\"color: #000;\">Vers&atilde;o:</strong> 1.0.1 01f26ae - 04/02/2022 - 23:45</p>\r\n"
+						+ "<p style=\"text-align: center;\"><strong style=\"color: #000;\">Vers&atilde;o:</strong> 1.0.2 c7f1da0 - 05/02/2022 - 16:45</p>\r\n"
 						+ "<p style=\"text-align: center;\"><strong style=\"color: #000;\">Para Windows, Linux e macOS</strong></p>\r\n"
 						+ "<p style=\"text-align: center;\"><strong style=\"color: #000;\"></strong> <a href=\"https://github.com/fpedrolucas95\" target=\"_blank\" rel=\"noopener\" title=\"Editor de Texto\">https://github.com/fpedrolucas95/</a></p>"));
 		label.setLocation(48, 16);
