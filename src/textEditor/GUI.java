@@ -1,6 +1,9 @@
-zpackage textEditor;
+package textEditor;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.PrintJob;
 import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,22 +11,20 @@ import javax.swing.*;
 import java.io.*;
 import javax.swing.text.DefaultEditorKit;
 
-public class GUI extends JFrame 
-{
-	
+public class GUI extends JFrame {
+
 	/**
 	 * 
 	 */
-	
+
 	private static final long serialVersionUID = 1L;
 	JTextArea area = new JTextArea();
 	private JFrame frame;
 	JFileChooser fileChooser = new JFileChooser();
-	
-	GUI() 
-	{
 
-		frame = new JFrame ("Editor de Texto");
+	GUI() {
+
+		frame = new JFrame("Editor de Texto");
 		JScrollPane scr = new JScrollPane();
 		scr.setViewportView(area);
 		frame.getContentPane().add(scr);
@@ -31,33 +32,54 @@ public class GUI extends JFrame
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(Color.WHITE);
 		JMenu arquivo = new JMenu("Arquivo");
+		JMenuItem novo = new JMenuItem("Novo");
+		novo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame a = new GUI();
+			}
+		});
 		JMenuItem abrir = new JMenuItem("Abrir");
-			abrir.addActionListener(new AbrirArquivo());
+		abrir.addActionListener(new AbrirArquivo());
 		JMenuItem salvar = new JMenuItem("Salvar");
-			salvar.addActionListener(new SalvarArquivo());
+		salvar.addActionListener(new SalvarArquivo());
+		JMenuItem imprimir = new JMenuItem("Imprimir");
 		JMenuItem fechar = new JMenuItem("Fechar");
-			fechar.addActionListener(new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
-							System.exit(0);
-						}
-					});
+		fechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		JMenu editar = new JMenu("Editar");
 		JMenuItem copiar = new JMenuItem("Copiar");
 		JMenuItem cortar = new JMenuItem("Recortar");
 		JMenuItem colar = new JMenuItem("Colar");
+		JMenu ferramentas = new JMenu("Ferramentas");
+		JMenuItem calculadora = new JMenuItem("Calculadora");
 		JMenu ajuda = new JMenu("Ajuda");
 		JMenuItem sobre = new JMenuItem("Sobre");
-		
+
 		menu.add(arquivo);
+		arquivo.add(novo);
 		arquivo.add(abrir);
 		arquivo.add(salvar);
+		arquivo.add(new JSeparator());
+		arquivo.add(imprimir);
+		arquivo.add(new JSeparator());
 		arquivo.add(fechar);
 		menu.add(editar);
 		editar.add(copiar);
 		editar.add(cortar);
 		editar.add(colar);
+		menu.add(ferramentas);
+		ferramentas.add(calculadora);
+		calculadora.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Calculadora();
+			}
+
+		});
 		menu.add(ajuda);
 		ajuda.add(sobre);
 		sobre.addActionListener(new ActionListener() {
@@ -68,13 +90,11 @@ public class GUI extends JFrame
 			}
 
 		});
-		
+
 		frame.setSize(512, 384);
 		frame.setVisible(true);
 		frame.setJMenuBar(menu);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		ActionListener acao = new ActionListener() {
 
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,9 +108,38 @@ public class GUI extends JFrame
 		copiar.addActionListener(acao);
 		cortar.addActionListener(acao);
 		colar.addActionListener(acao);
-		
+
+		imprimir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				imprimir();
+			}
+		});
+
 	}
-	
+
+	public void imprimir() {
+		String total = area.getText();
+		PrintJob print = getToolkit().getPrintJob(this, "Imprimir arquivo", null);
+		Graphics printGraphics = print.getGraphics();
+		printGraphics.setFont(new Font("Arial", Font.PLAIN, 10));
+		printGraphics.drawString("Imprimido:", 100, 100);
+		int inicio = 0;
+		int linhas = 1;
+		for (int i = 0; i < total.length(); i++) {
+			if ((int) total.charAt(i) == 10) {
+				printGraphics.drawString(total.substring(inicio, i - 1), 100, 100 + (15 * linhas));
+				inicio = i + 1;
+				linhas++;
+			}
+		}
+		printGraphics.drawString(total.substring(inicio, total.length()), 100, 100 + (15 * linhas));
+		printGraphics.dispose();
+		print.end();
+
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
 	class AbrirArquivo implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
@@ -124,7 +173,7 @@ public class GUI extends JFrame
 			}
 		}
 	}
-	
+
 	public class SalvarArquivo implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
@@ -145,7 +194,7 @@ public class GUI extends JFrame
 			}
 		}
 	}
-	
+
 	private void menuEditar(ActionEvent evt) {
 
 		if (evt.getActionCommand().contentEquals("Copiar")) {
@@ -159,12 +208,12 @@ public class GUI extends JFrame
 			javax.swing.Action acaoColar = area.getActionMap().get(DefaultEditorKit.pasteAction);
 			acaoColar.actionPerformed(evt);
 		}
-	} 
-	
+	}
+
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		JFrame a = new GUI();
-		
+
 	}
-		
-	
+
 }
