@@ -526,6 +526,7 @@ public class Calculadora extends JFrame {
 		});
 
 		this.setSize(317, 433);
+		this.setIconImage(new ImageIcon(getClass().getResource("calculadora.png")).getImage());
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setResizable(false);
