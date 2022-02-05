@@ -9,7 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import java.io.*;
+import javax.swing.text.Caret;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
 
 public class GUI extends JFrame {
 
@@ -53,6 +55,8 @@ public class GUI extends JFrame {
 		JMenuItem copiar = new JMenuItem("Copiar");
 		JMenuItem cortar = new JMenuItem("Recortar");
 		JMenuItem colar = new JMenuItem("Colar");
+		JMenuItem buscar = new JMenuItem("Procurar");
+		buscar = new JMenuItem(new acaoBuscar(area));
 		JMenu ferramentas = new JMenu("Ferramentas");
 		JMenuItem calculadora = new JMenuItem("Calculadora");
 		JMenu ajuda = new JMenu("Ajuda");
@@ -70,6 +74,8 @@ public class GUI extends JFrame {
 		editar.add(copiar);
 		editar.add(cortar);
 		editar.add(colar);
+		editar.add(new JSeparator());
+		editar.add(buscar);
 		menu.add(ferramentas);
 		ferramentas.add(calculadora);
 		calculadora.addActionListener(new ActionListener() {
@@ -94,6 +100,7 @@ public class GUI extends JFrame {
 		frame.setSize(512, 384);
 		frame.setVisible(true);
 		frame.setJMenuBar(menu);
+		frame.getContentPane().add(scr);
 
 		ActionListener acao = new ActionListener() {
 
@@ -108,7 +115,7 @@ public class GUI extends JFrame {
 		copiar.addActionListener(acao);
 		cortar.addActionListener(acao);
 		colar.addActionListener(acao);
-
+		buscar.addActionListener(acao);
 		imprimir.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -118,6 +125,7 @@ public class GUI extends JFrame {
 
 	}
 
+	// IMPRIMIR ARQUIVO
 	public void imprimir() {
 		String total = area.getText();
 		PrintJob print = getToolkit().getPrintJob(this, "Imprimir arquivo", null);
@@ -140,6 +148,7 @@ public class GUI extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
+	// ABRIR ARQUIVO
 	class AbrirArquivo implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
@@ -174,6 +183,7 @@ public class GUI extends JFrame {
 		}
 	}
 
+	// SALVAR O ARQUIVO
 	public class SalvarArquivo implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
@@ -192,6 +202,46 @@ public class GUI extends JFrame {
 				writer.close();
 
 			}
+		}
+	}
+
+	// FUNÇÃO LOCALIZAR
+	public class acaoBuscar extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private JTextComponent area;
+
+		public acaoBuscar(JTextComponent area) {
+			this.area = area;
+			this.putValue(Action.NAME, "Procurar");
+		}
+
+		public void actionPerformed(ActionEvent arg0) {
+
+			String buscarTexto = area.getSelectedText();
+
+			if (buscarTexto == null) {
+				buscarTexto = "";
+			}
+
+			buscarTexto = JOptionPane.showInputDialog(area, "Procurar uma palavra ou frase:", buscarTexto);
+
+			String texto = area.getText();
+			Caret selecao = area.getCaret();
+			int posicao = 0;
+			if (selecao.getDot() != selecao.getMark()) {
+				posicao = selecao.getDot();
+			}
+
+			posicao = texto.indexOf(buscarTexto, posicao);
+			if (posicao == -1) {
+				return;
+			}
+			area.setCaretPosition(posicao);
+			area.moveCaretPosition(posicao + buscarTexto.length());
 		}
 	}
 
