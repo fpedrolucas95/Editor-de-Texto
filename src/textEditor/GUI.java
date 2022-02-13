@@ -27,6 +27,7 @@ public class GUI extends JFrame {
 	GUI() {
 
 		frame = new JFrame("Editor de Texto");
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto genérico", "txt"));
 		frame.setIconImage(new ImageIcon(getClass().getResource("editor.png")).getImage());
 		JScrollPane scr = new JScrollPane();
 		scr.setViewportView(area);
