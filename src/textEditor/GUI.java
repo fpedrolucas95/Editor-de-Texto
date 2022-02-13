@@ -7,7 +7,10 @@ import java.awt.PrintJob;
 import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.io.*;
 import javax.swing.text.Caret;
 import javax.swing.text.DefaultEditorKit;
@@ -15,19 +18,16 @@ import javax.swing.text.JTextComponent;
 
 public class GUI extends JFrame {
 
-	/**
-	 * 
-	 */
-
 	private static final long serialVersionUID = 1L;
-	JTextArea area = new JTextArea();
+	JTextArea area = new JTextArea(20, 20);
 	private JFrame frame;
 	JFileChooser fileChooser = new JFileChooser();
 
+
 	GUI() {
 
-		frame = new JFrame("Editor de Texto");
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto genérico", "txt"));
+		frame = new JFrame("Text Editor");
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Generic Text File", "txt"));
 		frame.setIconImage(new ImageIcon(getClass().getResource("editor.png")).getImage());
 		JScrollPane scr = new JScrollPane();
 		scr.setViewportView(area);
@@ -35,34 +35,36 @@ public class GUI extends JFrame {
 
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(Color.WHITE);
-		JMenu arquivo = new JMenu("Arquivo");
-		JMenuItem novo = new JMenuItem("Novo");
+		JMenu arquivo = new JMenu("File");
+		JMenuItem novo = new JMenuItem("New");
 		novo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame a = new GUI();
 			}
 		});
-		JMenuItem abrir = new JMenuItem("Abrir");
+		JMenuItem abrir = new JMenuItem("Open");
 		abrir.addActionListener(new AbrirArquivo());
-		JMenuItem salvar = new JMenuItem("Salvar");
+		JMenuItem salvar = new JMenuItem("Save");
 		salvar.addActionListener(new SalvarArquivo());
-		JMenuItem imprimir = new JMenuItem("Imprimir");
-		JMenuItem fechar = new JMenuItem("Fechar");
+		JMenuItem imprimir = new JMenuItem("Print");
+		JMenuItem fechar = new JMenuItem("Close");
 		fechar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		JMenu editar = new JMenu("Editar");
-		JMenuItem copiar = new JMenuItem("Copiar");
-		JMenuItem cortar = new JMenuItem("Recortar");
-		JMenuItem colar = new JMenuItem("Colar");
-		JMenuItem buscar = new JMenuItem("Procurar");
+		JMenu editar = new JMenu("Edit");
+		JMenuItem copiar = new JMenuItem("Copy");
+		JMenuItem cortar = new JMenuItem("Cut");
+		JMenuItem colar = new JMenuItem("Paste");
+		JMenuItem buscar = new JMenuItem("Search");
 		buscar = new JMenuItem(new acaoBuscar(area));
-		JMenu ferramentas = new JMenu("Ferramentas");
-		JMenuItem calculadora = new JMenuItem("Calculadora");
-		JMenu ajuda = new JMenu("Ajuda");
-		JMenuItem sobre = new JMenuItem("Sobre");
+
+		JMenu ferramentas = new JMenu("Tools");
+		JMenuItem calculadora = new JMenuItem("Calculator");
+
+		JMenu ajuda = new JMenu("Help");
+		JMenuItem sobre = new JMenuItem("About");
 
 		menu.add(arquivo);
 		arquivo.add(novo);
@@ -130,10 +132,10 @@ public class GUI extends JFrame {
 	// IMPRIMIR ARQUIVO
 	public void imprimir() {
 		String total = area.getText();
-		PrintJob print = getToolkit().getPrintJob(this, "Imprimir arquivo", null);
+		PrintJob print = getToolkit().getPrintJob(this, "Print file", null);
 		Graphics printGraphics = print.getGraphics();
 		printGraphics.setFont(new Font("Arial", Font.PLAIN, 10));
-		printGraphics.drawString("Imprimido:", 100, 100);
+		printGraphics.drawString("Printing:", 100, 100);
 		int inicio = 0;
 		int linhas = 1;
 		for (int i = 0; i < total.length(); i++) {
@@ -197,6 +199,7 @@ public class GUI extends JFrame {
 				PrintWriter writer = null;
 				try {
 					writer = new PrintWriter(file);
+					fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
 				} catch (FileNotFoundException ex) {
 					Logger.getLogger(SalvarArquivo.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -218,7 +221,7 @@ public class GUI extends JFrame {
 
 		public acaoBuscar(JTextComponent area) {
 			this.area = area;
-			this.putValue(Action.NAME, "Procurar");
+			this.putValue(Action.NAME, "Search");
 		}
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -229,7 +232,7 @@ public class GUI extends JFrame {
 				buscarTexto = "";
 			}
 
-			buscarTexto = JOptionPane.showInputDialog(area, "Procurar uma palavra ou frase:", buscarTexto);
+			buscarTexto = JOptionPane.showInputDialog(area, "Search words in file:", buscarTexto);
 
 			String texto = area.getText();
 			Caret selecao = area.getCaret();
@@ -249,14 +252,14 @@ public class GUI extends JFrame {
 
 	private void menuEditar(ActionEvent evt) {
 
-		if (evt.getActionCommand().contentEquals("Copiar")) {
+		if (evt.getActionCommand().contentEquals("Copy")) {
 
 			javax.swing.Action acaoCopiar = area.getActionMap().get(DefaultEditorKit.copyAction);
 			acaoCopiar.actionPerformed(evt);
-		} else if (evt.getActionCommand().contentEquals("Recortar")) {
+		} else if (evt.getActionCommand().contentEquals("Cut")) {
 			javax.swing.Action acaoCortar = area.getActionMap().get(DefaultEditorKit.cutAction);
 			acaoCortar.actionPerformed(evt);
-		} else if (evt.getActionCommand().contentEquals("Colar")) {
+		} else if (evt.getActionCommand().contentEquals("Paste")) {
 			javax.swing.Action acaoColar = area.getActionMap().get(DefaultEditorKit.pasteAction);
 			acaoColar.actionPerformed(evt);
 		}
