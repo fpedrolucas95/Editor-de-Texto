@@ -12,6 +12,7 @@ import java.io.*;
 import javax.swing.text.Caret;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI extends JFrame {
 
