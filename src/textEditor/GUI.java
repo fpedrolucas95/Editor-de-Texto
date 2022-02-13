@@ -26,8 +26,8 @@ public class GUI extends JFrame {
 
 	GUI() {
 
-		frame = new JFrame("Text Editor");
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Generic Text File", "txt"));
+		frame = new JFrame("テキストエディタ");
+		fileChooser.setFileFilter(new FileNameExtensionFilter("一般的なテキストファイル", "txt"));
 		frame.setIconImage(new ImageIcon(getClass().getResource("editor.png")).getImage());
 		JScrollPane scr = new JScrollPane();
 		scr.setViewportView(area);
@@ -35,36 +35,36 @@ public class GUI extends JFrame {
 
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(Color.WHITE);
-		JMenu arquivo = new JMenu("File");
-		JMenuItem novo = new JMenuItem("New");
+		JMenu arquivo = new JMenu("ファイル");
+		JMenuItem novo = new JMenuItem("新しい");
 		novo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame a = new GUI();
 			}
 		});
-		JMenuItem abrir = new JMenuItem("Open");
+		JMenuItem abrir = new JMenuItem("開ける");
 		abrir.addActionListener(new AbrirArquivo());
-		JMenuItem salvar = new JMenuItem("Save");
+		JMenuItem salvar = new JMenuItem("保存する");
 		salvar.addActionListener(new SalvarArquivo());
-		JMenuItem imprimir = new JMenuItem("Print");
-		JMenuItem fechar = new JMenuItem("Close");
+		JMenuItem imprimir = new JMenuItem("印刷ファイル");
+		JMenuItem fechar = new JMenuItem("ウィンドウを閉じる");
 		fechar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		JMenu editar = new JMenu("Edit");
-		JMenuItem copiar = new JMenuItem("Copy");
-		JMenuItem cortar = new JMenuItem("Cut");
-		JMenuItem colar = new JMenuItem("Paste");
-		JMenuItem buscar = new JMenuItem("Search");
+		JMenu editar = new JMenu("編集");
+		JMenuItem copiar = new JMenuItem("コピー");
+		JMenuItem cortar = new JMenuItem("切る");
+		JMenuItem colar = new JMenuItem("ペースト");
+		JMenuItem buscar = new JMenuItem("探す");
 		buscar = new JMenuItem(new acaoBuscar(area));
 
-		JMenu ferramentas = new JMenu("Tools");
-		JMenuItem calculadora = new JMenuItem("Calculator");
+		JMenu ferramentas = new JMenu("ツール");
+		JMenuItem calculadora = new JMenuItem("電卓");
 
-		JMenu ajuda = new JMenu("Help");
-		JMenuItem sobre = new JMenuItem("About");
+		JMenu ajuda = new JMenu("ヘルプ");
+		JMenuItem sobre = new JMenuItem("このソフトウェアについて");
 
 		menu.add(arquivo);
 		arquivo.add(novo);
@@ -132,10 +132,10 @@ public class GUI extends JFrame {
 	// IMPRIMIR ARQUIVO
 	public void imprimir() {
 		String total = area.getText();
-		PrintJob print = getToolkit().getPrintJob(this, "Print file", null);
+		PrintJob print = getToolkit().getPrintJob(this, "印刷ファイル", null);
 		Graphics printGraphics = print.getGraphics();
 		printGraphics.setFont(new Font("Arial", Font.PLAIN, 10));
-		printGraphics.drawString("Printing:", 100, 100);
+		printGraphics.drawString("印刷:", 100, 100);
 		int inicio = 0;
 		int linhas = 1;
 		for (int i = 0; i < total.length(); i++) {
@@ -199,7 +199,6 @@ public class GUI extends JFrame {
 				PrintWriter writer = null;
 				try {
 					writer = new PrintWriter(file);
-					fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
 				} catch (FileNotFoundException ex) {
 					Logger.getLogger(SalvarArquivo.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -221,7 +220,7 @@ public class GUI extends JFrame {
 
 		public acaoBuscar(JTextComponent area) {
 			this.area = area;
-			this.putValue(Action.NAME, "Search");
+			this.putValue(Action.NAME, "探す");
 		}
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -232,7 +231,7 @@ public class GUI extends JFrame {
 				buscarTexto = "";
 			}
 
-			buscarTexto = JOptionPane.showInputDialog(area, "Search words in file:", buscarTexto);
+			buscarTexto = JOptionPane.showInputDialog(area, "ファイル内の単語を検索:", buscarTexto);
 
 			String texto = area.getText();
 			Caret selecao = area.getCaret();
@@ -252,14 +251,14 @@ public class GUI extends JFrame {
 
 	private void menuEditar(ActionEvent evt) {
 
-		if (evt.getActionCommand().contentEquals("Copy")) {
+		if (evt.getActionCommand().contentEquals("コピー")) {
 
 			javax.swing.Action acaoCopiar = area.getActionMap().get(DefaultEditorKit.copyAction);
 			acaoCopiar.actionPerformed(evt);
-		} else if (evt.getActionCommand().contentEquals("Cut")) {
+		} else if (evt.getActionCommand().contentEquals("切る")) {
 			javax.swing.Action acaoCortar = area.getActionMap().get(DefaultEditorKit.cutAction);
 			acaoCortar.actionPerformed(evt);
-		} else if (evt.getActionCommand().contentEquals("Paste")) {
+		} else if (evt.getActionCommand().contentEquals("ペースト")) {
 			javax.swing.Action acaoColar = area.getActionMap().get(DefaultEditorKit.pasteAction);
 			acaoColar.actionPerformed(evt);
 		}
