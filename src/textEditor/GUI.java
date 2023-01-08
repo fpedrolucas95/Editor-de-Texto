@@ -85,7 +85,8 @@ public class GUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Calculadora();
+				Calculadora calc = new Calculadora();
+				calc.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			}
 
 		});
