@@ -5,7 +5,6 @@ public static double somar(double n1, double n2) {
 return n1 + n2;
 }
 
-Copy code
 public static double subtrair(double n1, double n2) {
     return n1 - n2;
 }
